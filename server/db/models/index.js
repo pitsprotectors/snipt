@@ -17,9 +17,9 @@ const Snippet = require('./snippet')
  * instead of: const User = require('../db/models/user')
  */
 
-User.hasMany(Project)
-Project.hasMany(Question)
-Question.hasMany(Snippet)
+User.hasMany(Project, {onDelete: 'CASCADE'})
+Project.hasMany(Question, {onDelete: 'CASCADE'})
+Question.hasMany(Snippet, {onDelete: 'CASCADE'})
 
 Snippet.belongsTo(Question)
 Question.belongsTo(Project)

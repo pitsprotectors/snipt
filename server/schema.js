@@ -1,4 +1,4 @@
-export default `
+module.exports = `
   type User {
     id: ID!
     firstName: String!
@@ -38,5 +38,17 @@ export default `
     questions: [Question!]!
     snippet(id: ID!): Snippet
     snippets: [Snippet!]!
+  }
+  type Mutation {
+    deleteSnippet(id: ID!): Int!
+    deleteQuestion(id: ID!): Int!
+    deleteProject(id: ID!): Int!
+    createSnippet(questionId: ID!, content: String!, url: String!): Snippet!
+    createQuestion(projectId: ID!, content: String!): Question!
+    createProject(userId: ID!, name: String!): Project!
+    createUser(firstName: String!, lastName: String!, email: String!, password: String!): User!
+    updateProject(id: ID! name: String!): [Int!]!
+    updateQuestion(id: ID! content: String!): [Int!]!
+    updateUser(id: ID!, firstName: String!, lastName: String!, email: String!, password: String!): User!
   }
 `
