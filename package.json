@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "build-client": "webpack",
+    "build-client-production": "webpack -p",
     "build-client-watch": "webpack -w",
     "deploy": "script/deploy",
     "heroku-token": "script/encrypt-heroku-auth-token.js",
@@ -19,8 +20,10 @@
     "seed": "node script/seed.js",
     "start": "node server",
     "start-dev": "NODE_ENV='development' npm run build-client-watch & NODE_ENV='development' npm run start-server",
+    "windows-start-dev": "set NODE_ENV=development&&npm run build-client-watch & NODE_ENV='development' npm run start-server",
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
-    "test": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register"
+    "test": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register",
+    "windows-test": "set NODE_ENV=test&&mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" --require @babel/polyfill --require @babel/register"
   },
   "husky": {
     "hooks": {
