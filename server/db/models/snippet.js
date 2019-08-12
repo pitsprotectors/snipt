@@ -7,8 +7,7 @@ const Snippet = db.define('snippet', {
     allowNull: false
   },
   url: {
-    type: Sequelize.TEXT,
-    allowNull: false
+    type: Sequelize.TEXT
   }
 })
 
