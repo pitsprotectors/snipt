@@ -12,6 +12,14 @@ export default class Project extends Component {
           {' '}
           {this.props.project.name}{' '}
         </Link>
+        <button
+          type="button"
+          onClick={() => {
+            this.props.deleteProject(this.props.project.id)
+          }}
+        >
+          X
+        </button>
       </div>
     )
   }
