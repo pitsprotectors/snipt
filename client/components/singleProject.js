@@ -49,7 +49,6 @@ export default class SingleProject extends Component {
 
   async changeProjectName(event) {
     event.preventDefault()
-    console.log(this.state.newProjectName)
     const mutation = gql`
     mutation{
         updateProject(id: ${this.state.project.id}, name: "${
@@ -71,7 +70,6 @@ export default class SingleProject extends Component {
   }
 
   render() {
-    console.log(this.state.project)
     return (
       <div>
         <h2>{this.state.project.name}</h2>
@@ -84,6 +82,7 @@ export default class SingleProject extends Component {
           />
           <input type="submit" />
         </form>
+        <h3>QUESTIONS:</h3>
         {this.state.questions &&
           this.state.questions.map((question, index) => {
             return (

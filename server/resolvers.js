@@ -71,17 +71,12 @@ module.exports = {
         name
       })
     },
-    updateQuestion: (parent, {id, content}, {db}, info) =>
-      db.models.question.update(
-        {
-          content
-        },
-        {
-          where: {
-            id
-          }
-        }
-      ),
+    updateQuestion: async (parent, {id, content}, {db}, info) => {
+      const question = await db.models.question.findByPk(id)
+      return question.update({
+        content
+      })
+    },
     updateUser: async (
       parent,
       {id, firstName, lastName, email, password},

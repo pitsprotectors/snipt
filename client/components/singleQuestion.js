@@ -7,14 +7,17 @@ const client = new ApolloClient()
 export default class SingleQuestion extends Component {
   constructor() {
     super()
-    this.state = {questionName: '', snippets: []}
+    this.state = {question: {}, snippets: [], newQuestionContent: ''}
     this.deleteSnippet = this.deleteSnippet.bind(this)
+    this.changeQuestionContent = this.changeQuestionContent.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
   }
 
   async componentDidMount() {
     const query = gql`
             query {
                 question(id: ${this.props.match.params.id}){
+                  id
                     content
                     snippets {
                         id
@@ -25,7 +28,7 @@ export default class SingleQuestion extends Component {
         `
     const results = await client.query({query})
     this.setState({
-      questionName: results.data.question.content,
+      question: results.data.question,
       snippets: results.data.question.snippets
     })
   }
@@ -45,10 +48,42 @@ export default class SingleQuestion extends Component {
     })
   }
 
+  async changeQuestionContent(event) {
+    event.preventDefault()
+    const mutation = gql`
+    mutation{
+        updateQuestion(id: ${this.state.question.id}, content: "${
+      this.state.newQuestionContent
+    }"){id
+    content}
+    }
+`
+    const {data} = await client.mutate({mutation})
+    this.setState({
+      question: data.updateQuestion
+    })
+  }
+
+  handleInputChange(event) {
+    this.setState({
+      newQuestionContent: event.target.value
+    })
+  }
+
   render() {
     return (
       <div>
-        <h2>{this.state.questionName}</h2>
+        <h2>{this.state.question.content}</h2>
+        <form onSubmit={this.changeQuestionContent}>
+          <label>Update Question:</label>
+          <input
+            type="text"
+            value={this.state.newQuestionContent}
+            onChange={this.handleInputChange}
+          />
+          <input type="submit" />
+        </form>
+        <h3>SNIPPETS:</h3>
         {this.state.snippets &&
           this.state.snippets.map((snippet, index) => {
             return (
