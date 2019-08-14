@@ -7,13 +7,16 @@ const client = new ApolloClient()
 export default class SingleProject extends Component {
   constructor() {
     super()
-    this.state = {projectName: '', questions: []}
+    this.state = {project: {}, questions: [], newProjectName: ''}
     this.deleteQuestion = this.deleteQuestion.bind(this)
+    this.changeProjectName = this.changeProjectName.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
   }
   async componentDidMount() {
     const query = gql`
     query {
       project(id: ${this.props.match.params.id}){
+        id
         name
         questions {
           id
@@ -24,7 +27,7 @@ export default class SingleProject extends Component {
   `
     const results = await client.query({query})
     this.setState({
-      projectName: results.data.project.name,
+      project: results.data.project,
       questions: results.data.project.questions
     })
   }
@@ -44,10 +47,43 @@ export default class SingleProject extends Component {
     })
   }
 
+  async changeProjectName(event) {
+    event.preventDefault()
+    console.log(this.state.newProjectName)
+    const mutation = gql`
+    mutation{
+        updateProject(id: ${this.state.project.id}, name: "${
+      this.state.newProjectName
+    }"){id
+    name}
+    }
+`
+    const {data} = await client.mutate({mutation})
+    this.setState({
+      project: data.updateProject
+    })
+  }
+
+  handleInputChange(event) {
+    this.setState({
+      newProjectName: event.target.value
+    })
+  }
+
   render() {
+    console.log(this.state.project)
     return (
       <div>
-        <h2>{this.state.projectName}</h2>
+        <h2>{this.state.project.name}</h2>
+        <form onSubmit={this.changeProjectName}>
+          <label>Update Project Name:</label>
+          <input
+            type="text"
+            value={this.state.newProjectName}
+            onChange={this.handleInputChange}
+          />
+          <input type="submit" />
+        </form>
         {this.state.questions &&
           this.state.questions.map((question, index) => {
             return (

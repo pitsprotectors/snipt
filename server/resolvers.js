@@ -65,17 +65,12 @@ module.exports = {
         email,
         password
       }),
-    updateProject: (parent, {id, name}, {db}, info) =>
-      db.models.project.update(
-        {
-          name
-        },
-        {
-          where: {
-            id
-          }
-        }
-      ),
+    updateProject: async (parent, {id, name}, {db}, info) => {
+      const project = await db.models.project.findByPk(id)
+      return project.update({
+        name
+      })
+    },
     updateQuestion: (parent, {id, content}, {db}, info) =>
       db.models.question.update(
         {
@@ -94,7 +89,6 @@ module.exports = {
       info
     ) => {
       const user = await db.models.user.findByPk(id)
-      console.log(user)
       return user.update({
         firstName,
         lastName,

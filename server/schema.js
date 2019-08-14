@@ -47,7 +47,7 @@ module.exports = `
     createQuestion(projectId: ID!, content: String!): Question!
     createProject(userId: ID!, name: String!): Project!
     createUser(firstName: String!, lastName: String!, email: String!, password: String!): User!
-    updateProject(id: ID! name: String!): [Int!]!
+    updateProject(id: ID! name: String!): Project!
     updateQuestion(id: ID! content: String!): [Int!]!
     updateUser(id: ID!, firstName: String!, lastName: String!, email: String!, password: String!): User!
   }
