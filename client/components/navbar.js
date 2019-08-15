@@ -10,7 +10,9 @@ const Navbar = props => (
           {/* The navbar will show these links after you log in */}
           <Link to="/home">Home</Link>
           <Link to="/projects">projects</Link>
-          <a href="#">Logout</a>
+          <a href="#" onClick={props.logout}>
+            Logout
+          </a>
         </div>
       ) : (
         <div>

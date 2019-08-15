@@ -11,19 +11,25 @@ class App extends Component {
     super(props)
     this.state = {user: ''}
     this.auth = this.auth.bind(this)
+    this.logout = this.logout.bind(this)
   }
 
   async componentDidMount() {
-    const query = gql`
-      query {
+    const mutation = gql`
+      mutation {
         me {
-          firstName
+          id
         }
       }
     `
-    const result = await client.query({query})
+    console.log('before query')
+    const result = await client.mutate({mutation})
     console.log(result)
-    this.setState({user: result})
+    if (result) {
+      this.setState({user: result})
+    } else {
+      this.setState({user: {}})
+    }
   }
 
   auth(user) {
@@ -31,10 +37,22 @@ class App extends Component {
     console.log('state.user', this.state.user)
   }
 
+  async logout() {
+    const mutation = gql`
+      mutation {
+        logout
+      }
+    `
+    console.log('before query')
+    const result = await client.mutate({mutation})
+    console.log(result)
+    this.setState({user: ''})
+  }
+
   render() {
     return (
       <div>
-        <Navbar user={this.state.user} auth={this.auth} />
+        <Navbar user={this.state.user} auth={this.auth} logout={this.logout} />
         <Routes user={this.state.user} auth={this.auth} />
       </div>
     )
