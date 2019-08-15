@@ -1,3 +1,4 @@
+const axios = require('axios')
 module.exports = {
   User: {
     projects: (parent, args, context, info) => parent.getProjects()
@@ -21,9 +22,21 @@ module.exports = {
     questions: (parent, args, {db}, info) => db.models.question.findAll(),
     snippets: (parent, args, {db}, info) => db.models.snippet.findAll(),
     question: (parent, {id}, {db}, info) => db.models.question.findByPk(id),
-    snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id)
+    snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
+    me: async (parent, args, {db}, info) => {
+      console.log('before')
+      const {data} = await axios.get('http://localhost:4000/auth/me')
+      return data
+    }
   },
   Mutation: {
+    login: async (parent, {email, password}, {db}, info) => {
+      const user = await axios.post('http://localhost:4000/auth/login', {
+        email,
+        password
+      })
+      return user.data
+    },
     deleteSnippet: (parent, {id}, {db}, info) =>
       db.models.snippet.destroy({
         where: {
@@ -49,7 +62,7 @@ module.exports = {
         url
       }),
     createQuestion: (parent, {projectId, content}, {db}, info) =>
-      db.models.snippet.create({
+      db.models.question.create({
         projectId,
         content
       }),
@@ -58,13 +71,21 @@ module.exports = {
         userId,
         name
       }),
-    createUser: (parent, {firstName, lastName, email, password}, {db}, info) =>
-      db.models.user.create({
+    createUser: async (
+      parent,
+      {firstName, lastName, email, password},
+      {db},
+      info
+    ) => {
+      const user = await axios.post('http://localhost:4000/auth/signup', {
         firstName,
         lastName,
         email,
         password
-      }),
+      })
+      console.log(user.data)
+      return user.data
+    },
     updateProject: (parent, {id, name}, {db}, info) =>
       db.models.project.update(
         {

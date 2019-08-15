@@ -5,8 +5,9 @@
  */
 export {default as Navbar} from './navbar'
 export {default as UserHome} from './user-home'
-export {Login, Signup} from './auth-form'
+export {default as Signup} from './signup'
 export {default as ProjectList} from './projectList'
 export {default as SingleProject} from './singleProject'
 export {default as Question} from './question'
 export {default as SingleQuestion} from './singleQuestion'
+export {default as Login} from './login'

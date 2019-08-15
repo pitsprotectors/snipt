@@ -38,8 +38,10 @@ module.exports = `
     questions: [Question!]!
     snippet(id: ID!): Snippet
     snippets: [Snippet!]!
+    me: User!
   }
   type Mutation {
+    login(email: String!, password: String!): User!
     deleteSnippet(id: ID!): Int!
     deleteQuestion(id: ID!): Int!
     deleteProject(id: ID!): Int!

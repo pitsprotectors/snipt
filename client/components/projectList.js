@@ -3,16 +3,6 @@ import Project from './project'
 import ApolloClient from 'apollo-boost'
 import gql from 'graphql-tag'
 const client = new ApolloClient()
-const query = gql`
-  query {
-    user(id: 1) {
-      projects {
-        name
-        id
-      }
-    }
-  }
-`
 
 export default class ProjectList extends Component {
   constructor() {
@@ -21,6 +11,16 @@ export default class ProjectList extends Component {
     this.deleteProject = this.deleteProject.bind(this)
   }
   async componentDidMount() {
+    const query = gql`
+      query {
+        user(id: ${this.props.user.id}) {
+          projects {
+            name
+            id
+          }
+        }
+      }
+    `
     const results = await client.query({query})
     this.setState({projects: results.data.user.projects})
   }

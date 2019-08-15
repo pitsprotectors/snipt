@@ -5,8 +5,8 @@ const {User, Project, Question, Snippet} = require('../server/db/models')
 
 const users = [
   {
-    email: 'mferens0@biblegateway.com',
-    password: 'CIs3tT2WdBu',
+    email: '123',
+    password: '123',
     firstName: 'Maurie',
     lastName: 'Ferens'
   },
