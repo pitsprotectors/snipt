@@ -48,12 +48,14 @@ module.exports = {
       })
       return id
     },
-    createSnippet: (parent, {questionId, content, url}, {db}) =>
-      db.models.snippet.create({
+    createSnippet: (parent, {questionId, content, url}, {db}) => {
+      console.log('REACHED RESOLVER: ', questionId, content, url)
+      return db.models.snippet.create({
         questionId,
         content,
         url
-      }),
+      })
+    },
     createQuestion: (parent, {projectId, content}, {db}) =>
       db.models.question.create({
         projectId,
