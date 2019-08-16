@@ -1,100 +1,95 @@
 module.exports = {
   User: {
-    projects: (parent, args, context, info) => parent.getProjects()
+    projects: parent => parent.getProjects()
   },
   Project: {
-    questions: (parent, args, context, info) => parent.getQuestions(),
-    user: (parent, args, context, info) => parent.getUser()
+    questions: parent => parent.getQuestions(),
+    user: parent => parent.getUser()
   },
   Question: {
-    snippets: (parent, args, context, info) => parent.getSnippets(),
-    project: (parent, args, context, info) => parent.getProject()
+    snippets: parent => parent.getSnippets(),
+    project: parent => parent.getProject()
   },
   Snippet: {
-    question: (parent, args, context, info) => parent.getQuestion()
+    question: parent => parent.getQuestion()
   },
   Query: {
-    projects: (parent, args, {db}, info) => db.models.project.findAll(),
-    users: (parent, args, {db}, info) => db.models.user.findAll(),
-    project: (parent, {id}, {db}, info) => db.models.project.findByPk(id),
-    user: (parent, {id}, {db}, info) => db.models.user.findByPk(id),
-    questions: (parent, args, {db}, info) => db.models.question.findAll(),
-    snippets: (parent, args, {db}, info) => db.models.snippet.findAll(),
-    question: (parent, {id}, {db}, info) => db.models.question.findByPk(id),
-    snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id)
+    projects: (parent, args, {db}) => db.models.project.findAll(),
+    users: (parent, args, {db}) => db.models.user.findAll(),
+    project: (parent, {id}, {db}) => db.models.project.findByPk(id),
+    user: (parent, {id}, {db}) => db.models.user.findByPk(id),
+    questions: (parent, args, {db}) => db.models.question.findAll(),
+    snippets: (parent, args, {db}) => db.models.snippet.findAll(),
+    question: (parent, {id}, {db}) => db.models.question.findByPk(id),
+    snippet: (parent, {id}, {db}) => db.models.snippet.findByPk(id)
   },
   Mutation: {
-    deleteSnippet: (parent, {id}, {db}, info) =>
+    deleteSnippet: (parent, {id}, {db}) => {
       db.models.snippet.destroy({
         where: {
           id: id
         }
-      }),
-    deleteQuestion: (parent, {id}, {db}, info) =>
+      })
+      return id
+    },
+    deleteQuestion: (parent, {id}, {db}) => {
       db.models.question.destroy({
         where: {
           id: id
         }
-      }),
-    deleteProject: (parent, {id}, {db}, info) =>
+      })
+      return id
+    },
+    deleteProject: (parent, {id}, {db}) => {
       db.models.project.destroy({
         where: {
           id: id
         }
-      }),
-    createSnippet: (parent, {questionId, content, url}, {db}, info) =>
+      })
+      return id
+    },
+    createSnippet: (parent, {questionId, content, url}, {db}) =>
       db.models.snippet.create({
         questionId,
         content,
         url
       }),
-    createQuestion: (parent, {projectId, content}, {db}, info) =>
-      db.models.snippet.create({
+    createQuestion: (parent, {projectId, content}, {db}) =>
+      db.models.question.create({
         projectId,
         content
       }),
-    createProject: (parent, {userId, name}, {db}, info) =>
+    createProject: (parent, {userId, name}, {db}) =>
       db.models.project.create({
         userId,
         name
       }),
-    createUser: (parent, {firstName, lastName, email, password}, {db}, info) =>
+    createUser: (parent, {firstName, lastName, email, password}, {db}) =>
       db.models.user.create({
         firstName,
         lastName,
         email,
         password
       }),
-    updateProject: (parent, {id, name}, {db}, info) =>
-      db.models.project.update(
-        {
-          name
-        },
-        {
-          where: {
-            id
-          }
-        }
-      ),
-    updateQuestion: (parent, {id, content}, {db}, info) =>
-      db.models.question.update(
-        {
-          content
-        },
-        {
-          where: {
-            id
-          }
-        }
-      ),
+    updateProject: async (parent, {id, name}, {db}) => {
+      console.log(id, name)
+      const project = await db.models.project.findByPk(id)
+      return project.update({
+        name
+      })
+    },
+    updateQuestion: async (parent, {id, content}, {db}) => {
+      const question = await db.models.question.findByPk(id)
+      return question.update({
+        content
+      })
+    },
     updateUser: async (
       parent,
       {id, firstName, lastName, email, password},
-      {db},
-      info
+      {db}
     ) => {
       const user = await db.models.user.findByPk(id)
-      console.log(user)
       return user.update({
         firstName,
         lastName,

@@ -7,11 +7,10 @@ import {
   Signup,
   UserHome,
   ProjectList,
-  SingleProject,
-  SingleQuestion
+  ProjectDetail,
+  QuestionDetail
 } from './components'
 import {me} from './store'
-import Question from './components/question'
 
 /**
  * COMPONENT
@@ -30,8 +29,8 @@ class Routes extends Component {
         <Route path="/login" component={Login} />
         <Route exact path="/projects" component={ProjectList} />
         <Route path="/signup" component={Signup} />
-        <Route path="/projects/:id" component={SingleProject} />
-        <Route path="/questions/:id" component={SingleQuestion} />
+        <Route path="/projects/:projectId" component={ProjectDetail} />
+        <Route path="/questions/:questionId" component={QuestionDetail} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}

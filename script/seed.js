@@ -1134,16 +1134,16 @@ const snippets = [
 const projects = [
   {
     name: 'Beisa oryx',
-    userId: 9
-  },
+    userId: 1
+  }, //temp 9
   {
     name: 'Snake-necked turtle',
-    userId: 9
-  },
+    userId: 1
+  }, //temp 9
   {
     name: 'Ostrich',
-    userId: 6
-  },
+    userId: 1
+  }, //temp 6
   {
     name: 'Falcon, prairie',
     userId: 5
