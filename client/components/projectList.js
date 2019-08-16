@@ -11,18 +11,24 @@ export default class ProjectList extends Component {
     this.deleteProject = this.deleteProject.bind(this)
   }
   async componentDidMount() {
-    const query = gql`
-      query {
-        user(id: ${this.props.user.id}) {
-          projects {
-            name
-            id
+    console.log('\n\n\n\n this.props.user.id:', this.props.user.id)
+    if (this.props.user.id) {
+      const query = gql`
+        query {
+          user(id: ${this.props.user.id}) {
+            projects {
+              name
+              id
+            }
           }
         }
-      }
-    `
-    const results = await client.query({query})
-    this.setState({projects: results.data.user.projects})
+      `
+      const results = await client.query({query})
+      this.setState({projects: results.data.user.projects})
+    }
+  }
+  componentDidUpdate() {
+    console.log('/n/n/n componenet did updata:', this.props.user)
   }
 
   async deleteProject(id) {

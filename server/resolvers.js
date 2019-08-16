@@ -23,25 +23,29 @@ module.exports = {
     snippets: (parent, args, {db}, info) => db.models.snippet.findAll(),
     question: (parent, {id}, {db}, info) => db.models.question.findByPk(id),
     snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
-    me: async (parent, args, {db}, info) => {
-      console.log('before')
-      const user = await axios.get('http://localhost:4000/auth/me')
-      console.log(user.data)
-      return user.data
+    me: async (parent, args, {req}, info) => {
+      //console.log("req.headers:", req.headers)
+      // const user = await axios.get("http://localhost:4000/auth/me",{
+      //   headers:req.headers
+      // })
+      //console.log("\n\n\n\n\n\n\n\n\n me resolver:",user.data)
+      console.log('req.user:', req.user)
+      return req.user
     }
   },
   Mutation: {
-    me: async (parent, args, {db}, info) => {
-      console.log('before')
-      const user = await axios.get('http://localhost:4000/auth/me')
-      console.log(user.data)
-      return user.data
-    },
-    login: async (parent, {email, password}, {db}, info) => {
-      const user = await axios.post('http://localhost:4000/auth/login', {
-        email,
-        password
-      })
+    login: async (parent, {email, password}, {req}, info) => {
+      const user = await axios.post(
+        'http://localhost:4000/auth/login',
+        {
+          email,
+          password
+        },
+        {
+          headers: req.headers
+        }
+      )
+      //console.log("login user data:", user.data)
       return user.data
     },
     logout: async (parent, args, {db}, info) => {

@@ -5,6 +5,7 @@ import ApolloClient from 'apollo-boost'
 const client = new ApolloClient()
 import {Navbar} from './components'
 import Routes from './routes'
+import axios from 'axios'
 
 class App extends Component {
   constructor(props) {
@@ -15,26 +16,32 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const mutation = gql`
-      mutation {
+    const query = gql`
+      query {
         me {
           id
+          firstName
+          lastName
+          email
         }
       }
     `
     console.log('before query')
-    const result = await client.mutate({mutation})
-    console.log(result)
-    if (result) {
-      this.setState({user: result})
+    const user = await client.query({query})
+    // console.log(result)
+    // const user = await axios.get('/auth/me')
+    //console.log(user.data)
+    //return user.data
+    if (user.data) {
+      this.setState({user: user.data.me})
     } else {
-      this.setState({user: {}})
+      this.setState({user: null})
     }
   }
 
   auth(user) {
     this.setState({user: user})
-    console.log('state.user', this.state.user)
+    console.log('autth:', this.state.user)
   }
 
   async logout() {
@@ -43,9 +50,7 @@ class App extends Component {
         logout
       }
     `
-    console.log('before query')
     const result = await client.mutate({mutation})
-    console.log(result)
     this.setState({user: ''})
   }
 

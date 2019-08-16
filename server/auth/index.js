@@ -12,7 +12,8 @@ router.post('/login', async (req, res, next) => {
       console.log('Incorrect password for user:', req.body.email)
       res.status(401).send('Wrong username and/or password')
     } else {
-      req.login(user, err => (err ? next(err) : res.json(user)))
+      await req.login(user, err => (err ? next(err) : res.json(user)))
+      //console.log("\n\n\n\n\n\n\nreq.user:",req.user)
     }
   } catch (err) {
     next(err)
@@ -39,8 +40,7 @@ router.post('/logout', (req, res) => {
 })
 
 router.get('/me', (req, res) => {
-  console.log('req:', req)
-  console.log('req.user:', req.user)
+  console.log('me route:', req.user)
   res.json(req.user)
 })
 

@@ -1,7 +1,13 @@
 import React, {Component} from 'react'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-boost'
-const client = new ApolloClient()
+import axios from 'axios'
+import {createHttpLink} from 'apollo-link-http'
+const link = new createHttpLink({
+  uri: '/graphql',
+  credentials: 'same-origin'
+})
+const client = new ApolloClient({link})
 
 /**
  * COMPONENT
@@ -14,7 +20,7 @@ export default class Login extends Component {
 
   async handleSubmit(evt) {
     evt.preventDefault()
-    console.log(evt.target.email)
+    // console.log(evt.target.email)
     const mutation = gql`
       mutation {
         login(email:"${evt.target.email.value}", password:"${
@@ -28,6 +34,7 @@ export default class Login extends Component {
       }
     `
     const result = await client.mutate({mutation})
+    console.log(result.data)
     this.props.auth(result.data.login)
   }
 

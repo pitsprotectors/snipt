@@ -17,10 +17,11 @@ const resolvers = require('./resolvers')
 const server = new ApolloServer({
   typeDefs: gql(typeDefs),
   resolvers,
-  context: {db}
+  context: ({req}) => ({
+    req: req,
+    db
+  })
 })
-
-server.applyMiddleware({app})
 
 module.exports = app
 
@@ -45,6 +46,7 @@ passport.serializeUser((user, done) => done(null, user.id))
 
 passport.deserializeUser(async (id, done) => {
   try {
+    //console.log("id:",id)
     const user = await db.models.user.findByPk(id)
     done(null, user)
   } catch (err) {
@@ -78,7 +80,7 @@ const createApp = () => {
   // auth and api routes
   app.use('/auth', require('./auth'))
   app.use('/api', require('./api'))
-
+  server.applyMiddleware({app})
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, '..', 'public')))
 
