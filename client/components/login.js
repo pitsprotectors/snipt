@@ -27,8 +27,12 @@ export default class Login extends Component {
         }
       }
     `
-    const result = await client.mutate({mutation})
-    this.props.auth(result.data.login)
+    try {
+      const result = await client.mutate({mutation})
+      this.props.auth(result.data.login)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render() {

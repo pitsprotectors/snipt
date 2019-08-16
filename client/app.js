@@ -23,12 +23,16 @@ class App extends Component {
       }
     `
     console.log('before query')
-    const result = await client.mutate({mutation})
-    console.log(result)
-    if (result) {
-      this.setState({user: result})
-    } else {
-      this.setState({user: {}})
+    try {
+      const result = await client.mutate({mutation})
+      console.log(result)
+      if (result) {
+        this.setState({user: result})
+      } else {
+        this.setState({user: {}})
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -44,9 +48,13 @@ class App extends Component {
       }
     `
     console.log('before query')
-    const result = await client.mutate({mutation})
-    console.log(result)
-    this.setState({user: ''})
+    try {
+      const result = await client.mutate({mutation})
+      console.log(result)
+      this.setState({user: ''})
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render() {

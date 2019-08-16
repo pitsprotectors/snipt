@@ -22,11 +22,15 @@ export default class SingleProject extends Component {
       }
     }
   `
-    const results = await client.query({query})
-    this.setState({
-      projectName: results.data.project.name,
-      questions: results.data.project.questions
-    })
+    try {
+      const results = await client.query({query})
+      this.setState({
+        projectName: results.data.project.name,
+        questions: results.data.project.questions
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async deleteQuestion(id) {
@@ -35,13 +39,17 @@ export default class SingleProject extends Component {
             deleteQuestion(id: ${id})
         }
     `
-    await client.mutate({mutation})
-    const copy = this.state.questions
-    this.setState({
-      questions: copy.filter(question => {
-        return question.id !== id
+    try {
+      await client.mutate({mutation})
+      const copy = this.state.questions
+      this.setState({
+        questions: copy.filter(question => {
+          return question.id !== id
+        })
       })
-    })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render() {

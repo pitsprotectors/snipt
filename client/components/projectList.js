@@ -21,8 +21,12 @@ export default class ProjectList extends Component {
         }
       }
     `
-    const results = await client.query({query})
-    this.setState({projects: results.data.user.projects})
+    try {
+      const results = await client.query({query})
+      this.setState({projects: results.data.user.projects})
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async deleteProject(id) {
@@ -31,13 +35,17 @@ export default class ProjectList extends Component {
           deleteProject(id: ${id})
         }
     `
-    await client.mutate({mutation})
-    const copy = this.state.projects
-    this.setState({
-      projects: copy.filter(project => {
-        return project.id !== id
+    try {
+      await client.mutate({mutation})
+      const copy = this.state.projects
+      this.setState({
+        projects: copy.filter(project => {
+          return project.id !== id
+        })
       })
-    })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render() {

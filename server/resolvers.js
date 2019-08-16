@@ -25,28 +25,44 @@ module.exports = {
     snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
     me: async (parent, args, {db}, info) => {
       console.log('before')
-      const user = await axios.get('http://localhost:4000/auth/me')
-      console.log(user.data)
-      return user.data
+      try {
+        const user = await axios.get('http://localhost:4000/auth/me')
+        console.log(user.data)
+        return user.data
+      } catch (error) {
+        console.error(error)
+      }
     }
   },
   Mutation: {
     me: async (parent, args, {db}, info) => {
       console.log('before')
-      const user = await axios.get('http://localhost:4000/auth/me')
-      console.log(user.data)
-      return user.data
+      try {
+        const user = await axios.get('http://localhost:4000/auth/me')
+        console.log(user.data)
+        return user.data
+      } catch (error) {
+        console.error(error)
+      }
     },
     login: async (parent, {email, password}, {db}, info) => {
-      const user = await axios.post('http://localhost:4000/auth/login', {
-        email,
-        password
-      })
-      return user.data
+      try {
+        const user = await axios.post('http://localhost:4000/auth/login', {
+          email,
+          password
+        })
+        return user.data
+      } catch (error) {
+        console.error(error)
+      }
     },
     logout: async (parent, args, {db}, info) => {
-      const result = await axios.post('http://localhost:4000/auth/logout')
-      return result.status
+      try {
+        const result = await axios.post('http://localhost:4000/auth/logout')
+        return result.status
+      } catch (error) {
+        console.error(error)
+      }
     },
     deleteSnippet: (parent, {id}, {db}, info) =>
       db.models.snippet.destroy({

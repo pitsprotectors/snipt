@@ -23,11 +23,15 @@ export default class SingleQuestion extends Component {
                 }
             }
         `
-    const results = await client.query({query})
-    this.setState({
-      questionName: results.data.question.content,
-      snippets: results.data.question.snippets
-    })
+    try {
+      const results = await client.query({query})
+      this.setState({
+        questionName: results.data.question.content,
+        snippets: results.data.question.snippets
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async deleteSnippet(id) {
@@ -36,13 +40,17 @@ export default class SingleQuestion extends Component {
                 deleteSnippet(id: ${id})
             }
         `
-    await client.mutate({mutation})
-    const copy = this.state.snippets
-    this.setState({
-      snippets: copy.filter(snippet => {
-        return snippet.id !== id
+    try {
+      await client.mutate({mutation})
+      const copy = this.state.snippets
+      this.setState({
+        snippets: copy.filter(snippet => {
+          return snippet.id !== id
+        })
       })
-    })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render() {

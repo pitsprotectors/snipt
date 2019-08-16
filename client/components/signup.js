@@ -29,9 +29,13 @@ export default class SignUp extends Component {
         }
       }
     `
-    const result = await client.mutate({mutation})
-    console.log(result)
-    this.props.auth(result.data.createUser)
+    try {
+      const result = await client.mutate({mutation})
+      console.log(result)
+      this.props.auth(result.data.createUser)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render() {
