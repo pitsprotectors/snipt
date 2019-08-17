@@ -13,15 +13,31 @@ const app = express()
 const {ApolloServer, gql} = require('apollo-server-express')
 const typeDefs = require('./schema')
 const resolvers = require('./resolvers')
+const {GraphQLLocalStrategy, buildContext} = require('graphql-passport')
 
 const server = new ApolloServer({
   typeDefs: gql(typeDefs),
   resolvers,
-  context: ({req}) => ({
-    req: req,
-    db
-  })
+  context: ({req, res}) =>
+    buildContext({
+      req: req,
+      db,
+      res: res
+    })
 })
+
+passport.use(
+  new GraphQLLocalStrategy(async (email, password, done) => {
+    const user = await db.models.user.findOne({where: {email: email}})
+    if (user.correctPassword(password)) {
+      const matchingUser = user
+      done(null, matchingUser)
+    } else {
+      const error = new Error('no matching user')
+      done(error, null)
+    }
+  })
+)
 
 module.exports = app
 

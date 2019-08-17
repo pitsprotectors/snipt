@@ -23,36 +23,33 @@ module.exports = {
     snippets: (parent, args, {db}, info) => db.models.snippet.findAll(),
     question: (parent, {id}, {db}, info) => db.models.question.findByPk(id),
     snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
-    me: async (parent, args, {req}, info) => {
-      console.log('THIS IS THE ME RESOLVER: ', req.headers)
+    me: async (parent, args, context, info) => {
+      //console.log('THIS IS THE ME RESOLVER: ', req.headers)
       //console.log("req.headers:", req.headers)
       // const user = await axios.get("http://localhost:4000/auth/me",{
       //   headers:req.headers
       // })
       // console.log("\n\n\n\n\n\n\n\n\n me resolver:",user.data)
-      return req.user
+      return context.req.user
     }
   },
   Mutation: {
-    login: async (parent, {email, password}, {req}, info) => {
-      const user = await axios.post(
-        'http://localhost:4000/auth/login',
-        {
-          email,
-          password
-        },
-        {
-          headers: req.headers
-        }
-      )
-      //console.log("login user data:", user.data)
-      return user.data
-    },
-    logout: async (parent, args, {req}, info) => {
-      const result = await axios.post('http://localhost:4000/auth/logout', {
-        headers: req.headers
+    login: async (parent, {email, password}, context, info) => {
+      const {user} = await context.authenticate('graphql-local', {
+        email,
+        password
       })
-      return result.status
+      context.login(user)
+      return {user}
+    },
+    logout: async (parent, args, context, info) => {
+      // const result = await axios.post('http://localhost:4000/auth/logout', {
+      //   headers: context.req.headers
+      // })
+      // return result.status
+      context.logout()
+      context.req.session.destroy()
+      return 200
     },
     deleteSnippet: (parent, {id}, {db}, info) => {
       db.models.snippet.destroy({
@@ -99,15 +96,21 @@ module.exports = {
     createUser: async (
       parent,
       {firstName, lastName, email, password},
-      {db},
+      context,
       info
     ) => {
-      const user = await axios.post('http://localhost:4000/auth/signup', {
+      const existingUser = await context.db.models.user.findOne({email: email})
+      if (existingUser) {
+        throw new Error('User with email already exists')
+      }
+      const newUser = await context.db.models.user.create({
         firstName,
         lastName,
         email,
         password
       })
+      context.login(newUser)
+      return {user: newUser}
     },
     updateProject: async (parent, {id, name}, {db}) => {
       console.log(id, name)

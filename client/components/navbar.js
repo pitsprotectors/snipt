@@ -20,13 +20,12 @@ const Navbar = ({user, setUser}) => {
         {user.id ? (
           <div>
             {/* The navbar will show these links after you log in */}
-            <Link to="/home">Home</Link>
             <Link to="/projects">projects</Link>
             <a
               href="#"
               onClick={() => {
                 logout()
-                // setUser('')
+                setUser('')
               }}
             >
               Logout
@@ -45,29 +44,4 @@ const Navbar = ({user, setUser}) => {
   )
 }
 
-/**
- * CONTAINER
- */
-// const mapState = state => {
-//   return {
-//     isLoggedIn: !!state.user.id
-//   }
-// }
-
-// const mapDispatch = dispatch => {
-//   return {
-//     handleClick() {
-//       dispatch(logout())
-//     }
-//   }
-// }
-
 export default Navbar
-
-/**
- * PROP TYPES
- */
-// Navbar.propTypes = {
-//   handleClick: PropTypes.func.isRequired,
-//   isLoggedIn: PropTypes.bool.isRequired
-// }

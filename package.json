@@ -62,6 +62,7 @@
     "express-session": "^1.15.1",
     "faker": "^4.1.0",
     "graphql": "^14.4.2",
+    "graphql-passport": "^0.1.5",
     "graphql-tag": "^2.10.1",
     "history": "^4.9.0",
     "lodash.random": "^3.2.0",

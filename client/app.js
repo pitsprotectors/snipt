@@ -21,13 +21,12 @@ const App = () => {
   const [user, setUser] = useState('')
 
   useEffect(() => {
-    console.log('COMPONENT DID MOUNT FOR GET_ME', data)
-    setUser(data)
-  }, [])
+    if (data.me) setUser(data.me)
+  })
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>ERROR: {error.message}</p>
-  if (data) console.log(data)
+
   return (
     <div>
       <Navbar user={user} setUser={setUser} />

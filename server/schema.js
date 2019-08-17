@@ -29,6 +29,9 @@ module.exports = `
     questionId: ID!
     question: Question!
   }
+  type AuthPayload {
+    user: User
+  }
   type Query {
     user(id: ID!): User!
     users: [User!]!
@@ -41,7 +44,7 @@ module.exports = `
     me: User
   }
   type Mutation {
-    login(email: String!, password: String!): User!
+    login(email: String!, password: String!): AuthPayload
     logout: Int
     deleteSnippet(id: ID!): Int!
     deleteQuestion(id: ID!): Int!
@@ -49,7 +52,7 @@ module.exports = `
     createSnippet(questionId: ID!, content: String!, url: String!): Snippet!
     createQuestion(projectId: ID!, content: String!): Question!
     createProject(userId: ID!, name: String!): Project!
-    createUser(firstName: String!, lastName: String!, email: String!, password: String!): User!
+    createUser(firstName: String!, lastName: String!, email: String!, password: String!): AuthPayload
     updateProject(id: ID! name: String!): Project!
     updateQuestion(id: ID! content: String!): Question!
     updateUser(id: ID!, firstName: String!, lastName: String!, email: String!, password: String!): User!
