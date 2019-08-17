@@ -30,7 +30,7 @@ module.exports = `
     question: Question!
   }
   type Query {
-    user(id: ID!): User
+    user(id: ID!): User!
     users: [User!]!
     project(id: ID!): Project
     projects: [Project!]!
@@ -38,8 +38,11 @@ module.exports = `
     questions: [Question!]!
     snippet(id: ID!): Snippet
     snippets: [Snippet!]!
+    me: User
   }
   type Mutation {
+    login(email: String!, password: String!): User!
+    logout: Int
     deleteSnippet(id: ID!): Int!
     deleteQuestion(id: ID!): Int!
     deleteProject(id: ID!): Int!
