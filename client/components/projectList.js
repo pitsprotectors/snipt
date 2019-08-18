@@ -20,6 +20,33 @@ const DELETE_PROJECT = gql`
   }
 `
 
+// export default class ProjectList extends Component {
+//   constructor() {
+//     super()
+//     this.state = {projects: []}
+//     this.deleteProject = this.deleteProject.bind(this)
+//   }
+//   async componentDidMount() {
+//     console.log('\n\n\n\n this.props.user.id:', this.props.user.id)
+//     if (this.props.user.id) {
+//       const query = gql`
+//         query {
+//           user(id: ${this.props.user.id}) {
+//             projects {
+//               name
+//               id
+//             }
+//           }
+//         }
+//       `
+//       const results = await client.query({query})
+//       this.setState({projects: results.data.user.projects})
+//     }
+//   }
+//   componentDidUpdate() {
+//     console.log('/n/n/n componenet did updata:', this.props.user)
+//   }
+
 function DeleteProjectDetails({id, refetch}) {
   const [deleteProject, {data, loading, error}] = useMutation(DELETE_PROJECT)
   if (loading) return <p>Loading...</p>

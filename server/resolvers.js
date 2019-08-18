@@ -1,3 +1,4 @@
+const axios = require('axios')
 module.exports = {
   User: {
     projects: parent => parent.getProjects()
@@ -14,17 +15,43 @@ module.exports = {
     question: parent => parent.getQuestion()
   },
   Query: {
-    projects: (parent, args, {db}) => db.models.project.findAll(),
-    users: (parent, args, {db}) => db.models.user.findAll(),
-    project: (parent, {id}, {db}) => db.models.project.findByPk(id),
-    user: (parent, {id}, {db}) => db.models.user.findByPk(id),
-    questions: (parent, args, {db}) => db.models.question.findAll(),
-    snippets: (parent, args, {db}) => db.models.snippet.findAll(),
-    question: (parent, {id}, {db}) => db.models.question.findByPk(id),
-    snippet: (parent, {id}, {db}) => db.models.snippet.findByPk(id)
+    projects: (parent, args, {db}, info) => db.models.project.findAll(),
+    users: (parent, args, {db}, info) => db.models.user.findAll(),
+    project: (parent, {id}, {db}, info) => db.models.project.findByPk(id),
+    user: (parent, {id}, {db}, info) => db.models.user.findByPk(id),
+    questions: (parent, args, {db}, info) => db.models.question.findAll(),
+    snippets: (parent, args, {db}, info) => db.models.snippet.findAll(),
+    question: (parent, {id}, {db}, info) => db.models.question.findByPk(id),
+    snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
+    me: async (parent, args, context, info) => {
+      //console.log('THIS IS THE ME RESOLVER: ', req.headers)
+      //console.log("req.headers:", req.headers)
+      // const user = await axios.get("http://localhost:4000/auth/me",{
+      //   headers:req.headers
+      // })
+      // console.log("\n\n\n\n\n\n\n\n\n me resolver:",user.data)
+      return context.req.user
+    }
   },
   Mutation: {
-    deleteSnippet: (parent, {id}, {db}) => {
+    login: async (parent, {email, password}, context, info) => {
+      const {user} = await context.authenticate('graphql-local', {
+        email,
+        password
+      })
+      context.login(user)
+      return {user}
+    },
+    logout: async (parent, args, context, info) => {
+      // const result = await axios.post('http://localhost:4000/auth/logout', {
+      //   headers: context.req.headers
+      // })
+      // return result.status
+      context.logout()
+      context.req.session.destroy()
+      return 200
+    },
+    deleteSnippet: (parent, {id}, {db}, info) => {
       db.models.snippet.destroy({
         where: {
           id: id
@@ -56,7 +83,7 @@ module.exports = {
         url
       })
     },
-    createQuestion: (parent, {projectId, content}, {db}) =>
+    createQuestion: (parent, {projectId, content}, {db}, info) =>
       db.models.question.create({
         projectId,
         content
@@ -66,13 +93,25 @@ module.exports = {
         userId,
         name
       }),
-    createUser: (parent, {firstName, lastName, email, password}, {db}) =>
-      db.models.user.create({
+    createUser: async (
+      parent,
+      {firstName, lastName, email, password},
+      context,
+      info
+    ) => {
+      const existingUser = await context.db.models.user.findOne({email: email})
+      if (existingUser) {
+        throw new Error('User with email already exists')
+      }
+      const newUser = await context.db.models.user.create({
         firstName,
         lastName,
         email,
         password
-      }),
+      })
+      context.login(newUser)
+      return {user: newUser}
+    },
     updateProject: async (parent, {id, name}, {db}) => {
       console.log(id, name)
       const project = await db.models.project.findByPk(id)

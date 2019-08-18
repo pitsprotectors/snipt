@@ -13,14 +13,31 @@ const app = express()
 const {ApolloServer, gql} = require('apollo-server-express')
 const typeDefs = require('./schema')
 const resolvers = require('./resolvers')
+const {GraphQLLocalStrategy, buildContext} = require('graphql-passport')
 
 const server = new ApolloServer({
   typeDefs: gql(typeDefs),
   resolvers,
-  context: {db}
+  context: ({req, res}) =>
+    buildContext({
+      req: req,
+      db,
+      res: res
+    })
 })
 
-server.applyMiddleware({app})
+passport.use(
+  new GraphQLLocalStrategy(async (email, password, done) => {
+    const user = await db.models.user.findOne({where: {email: email}})
+    if (user.correctPassword(password)) {
+      const matchingUser = user
+      done(null, matchingUser)
+    } else {
+      const error = new Error('no matching user')
+      done(error, null)
+    }
+  })
+)
 
 module.exports = app
 
@@ -45,6 +62,7 @@ passport.serializeUser((user, done) => done(null, user.id))
 
 passport.deserializeUser(async (id, done) => {
   try {
+    //console.log("id:",id)
     const user = await db.models.user.findByPk(id)
     done(null, user)
   } catch (err) {
@@ -78,7 +96,7 @@ const createApp = () => {
   // auth and api routes
   app.use('/auth', require('./auth'))
   app.use('/api', require('./api'))
-
+  server.applyMiddleware({app})
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, '..', 'public')))
 
