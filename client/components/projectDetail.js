@@ -2,6 +2,7 @@ import React, {Fragment, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import {Link} from 'react-router-dom'
+import {Input, Button, Table, Form, TextArea} from 'semantic-ui-react'
 
 export const GET_PROJECT_DETAILS = gql`
   query GetProjectDetails($projectId: ID!) {
@@ -37,7 +38,7 @@ function DeleteQuestionDetails({id, refetch}) {
   if (error) return <p>ERROR: {error.message}</p>
   return (
     <Fragment>
-      <button
+      <Button
         type="button"
         onClick={async () => {
           await deleteQuestion({
@@ -47,7 +48,7 @@ function DeleteQuestionDetails({id, refetch}) {
         }}
       >
         DELETE
-      </button>
+      </Button>
     </Fragment>
   )
 }
@@ -61,7 +62,7 @@ function UpdateProjectDetails({id}) {
   if (error) return <p>ERROR: {error.message}</p>
   return (
     <Fragment>
-      <form
+      <Form
         onSubmit={e => {
           e.preventDefault()
           updateProject({
@@ -69,14 +70,14 @@ function UpdateProjectDetails({id}) {
           })
         }}
       >
-        <input
+        <Input
           type="text"
           onChange={e => {
             setName(e.target.value)
           }}
         />
-        <input type="submit" />
-      </form>
+        <Button> Change your Question here! </Button>
+      </Form>
     </Fragment>
   )
 }
@@ -89,18 +90,37 @@ export default function ProjectDetail({match}) {
   if (error) return <p>ERROR: {error.message}</p>
   return (
     <Fragment>
-      <h2>{data.project.name}</h2>
-      <UpdateProjectDetails id={data.project.id} />
-      {data.project.questions.map(question => (
-        <div key={question.id}>
-          <Link to={`/questions/${question.id}`}>
-            <div>
-              {question.content} {question.id}
+      <Table celled selectable>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell colSpan="2">{data.project.name}</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>
+              <UpdateProjectDetails id={data.project.id} />
+            </Table.Cell>
+          </Table.Row>
+          {data.project.questions.map(question => (
+            <div key={question.id}>
+              <Table.Row>
+                <Table.Cell>
+                  <Link to={`/questions/${question.id}`}>{question.id}</Link>
+                </Table.Cell>
+                <Table.Cell>
+                  <Link to={`/questions/${question.id}`}>
+                    {question.content}
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>
+                  <DeleteQuestionDetails id={question.id} refetch={refetch} />
+                </Table.Cell>
+              </Table.Row>
             </div>
-          </Link>
-          <DeleteQuestionDetails id={question.id} refetch={refetch} />
-        </div>
-      ))}
+          ))}
+        </Table.Body>
+      </Table>
     </Fragment>
   )
 }

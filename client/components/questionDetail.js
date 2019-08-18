@@ -1,5 +1,6 @@
 import React, {Fragment, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/react-hooks'
+import {Button, Table, Form, Header, TextArea} from 'semantic-ui-react'
 import gql from 'graphql-tag'
 
 export const GET_QUESTION_DETAILS = gql`
@@ -36,7 +37,7 @@ function DeleteSnippetDetails({id, refetch}) {
   if (error) return <p>ERROR: {error.message}</p>
   return (
     <Fragment>
-      <button
+      <Button
         type="button"
         onClick={async () => {
           await deleteSnippet({
@@ -46,7 +47,7 @@ function DeleteSnippetDetails({id, refetch}) {
         }}
       >
         DELETE
-      </button>
+      </Button>
     </Fragment>
   )
 }
@@ -60,7 +61,7 @@ function UpdateQuestionDetails({id}) {
   if (error) return <p>ERROR: {error.message}</p>
   return (
     <Fragment>
-      <form
+      <Form
         onSubmit={e => {
           e.preventDefault()
           updateProject({
@@ -68,14 +69,13 @@ function UpdateQuestionDetails({id}) {
           })
         }}
       >
-        <input
-          type="text"
+        <TextArea
           onChange={e => {
             setContent(e.target.value)
           }}
         />
-        <input type="submit" />
-      </form>
+        <Button type="submit" />
+      </Form>
     </Fragment>
   )
 }
@@ -88,16 +88,33 @@ export default function QuestionDetail({match}) {
   if (error) return <p>ERROR: {error.message}</p>
   return (
     <Fragment>
-      <h2>{data.question.content}</h2>
-      <UpdateQuestionDetails id={data.question.id} />
-      {data.question.snippets.map(snippet => (
-        <div key={snippet.id}>
-          <div>
-            {snippet.content} {snippet.id}
-          </div>
-          <DeleteSnippetDetails id={snippet.id} refetch={refetch} />
-        </div>
-      ))}
+      <Table celled selectable>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell colSpan="2">
+              <Header as="h3">{data.question.content}</Header>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row>
+            <UpdateQuestionDetails id={data.question.id} />
+          </Table.Row>
+          {data.question.snippets.map(snippet => (
+            <div key={snippet.id}>
+              <Table.Row>
+                <Table.Cell>
+                  {/* put the link here */}
+                  {snippet.content} {snippet.id}
+                </Table.Cell>
+                <Table.Cell>
+                  <DeleteSnippetDetails id={snippet.id} refetch={refetch} />
+                </Table.Cell>
+              </Table.Row>
+            </div>
+          ))}
+        </Table.Body>
+      </Table>
     </Fragment>
   )
 }
