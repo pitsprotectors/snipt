@@ -21,10 +21,8 @@ const App = () => {
   const [user, setUser] = useState('')
 
   useEffect(() => {
-    // refetch()
-    if (data.me) {
-      setUser(data.me)
-    }
+    if (data.me) setUser(data.me)
+    data.me = null
   })
 
   if (loading) return <p>Loading...</p>

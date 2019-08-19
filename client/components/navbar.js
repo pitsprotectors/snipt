@@ -26,7 +26,9 @@ const Navbar = ({user, setUser}) => {
               href="#"
               onClick={() => {
                 logout()
+                console.log(user, 'user to delete')
                 setUser('')
+                console.log(user)
               }}
             >
               Logout

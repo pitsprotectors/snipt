@@ -23,6 +23,7 @@ module.exports = {
     snippets: (parent, args, {db}, info) => db.models.snippet.findAll(),
     question: (parent, {id}, {db}, info) => db.models.question.findByPk(id),
     snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
+
     me: async (parent, args, context, info) => {
       return context.req.user
     },
