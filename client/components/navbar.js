@@ -12,7 +12,8 @@ const Navbar = ({user, setUser}) => {
 
   const [logout, {data, loading, error}] = useMutation(LOGOUT)
   if (loading) return <p>Loading...</p>
-  if (error) return <p>ERROR: {error.message}</p>
+  if (error) return <p>navbar ERROR: {error.message}</p>
+  //console.log("nbar",user)
   return (
     <div>
       <h1>SNIPTS</h1>

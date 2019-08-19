@@ -61,7 +61,7 @@ const Login = ({setUser}) => {
           <button type="submit">Login</button>
         </div>
       </form>
-      {/* <a href="/auth/google">Login with Google</a> */}
+      <a href="/auth/google">Login with Google</a>
     </div>
   )
 }
