@@ -19,6 +19,7 @@ module.exports = `
     id: ID!
     content: String!
     projectId: ID!
+    show: Boolean!
     project: Project!
     snippets: [Snippet!]!
   }
@@ -33,6 +34,7 @@ module.exports = `
     user: User
   }
   type Query {
+    show(id: ID!): [Question!]!
     user(id: ID!): User!
     users: [User!]!
     project(id: ID!): Project

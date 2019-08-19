@@ -25,7 +25,9 @@ module.exports = {
     snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
     me: async (parent, args, context, info) => {
       return context.req.user
-    }
+    },
+    show: (parent, {id}, {db}, info) =>
+      db.models.question.findAll({where: {projectId: id, show: true}})
   },
   Mutation: {
     login: async (parent, {email, password}, context, info) => {
