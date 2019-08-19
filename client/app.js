@@ -17,16 +17,24 @@ const App = () => {
     }
   `
 
-  const {data, loading, error} = useQuery(GET_ME)
+  const {data, loading, error, refetch} = useQuery(GET_ME)
   const [user, setUser] = useState('')
 
   useEffect(() => {
-    if (data.me) setUser(data.me)
+    // refetch()
+    if (data.me) {
+      setUser(data.me)
+    }
   })
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>app.js error: {error.message}</p>
-
+  if (data.me) {
+    console.log('data???', user)
+  }
+  if (user) {
+    console.log('user', user)
+  }
   return (
     <div>
       <Navbar user={user} setUser={setUser} />

@@ -70,10 +70,8 @@ export default function Projects() {
   const {data, loading, error, refetch} = useQuery(GET_PROJECTS)
   if (loading) return <p>Loading...</p>
   if (error) {
-    console.log(error)
     return <p>ERROR :(</p>
   }
-  console.log('data', data)
   return (
     <Fragment>
       {data &&

@@ -11,7 +11,6 @@ import {
 } from './components'
 
 const Routes = ({user, setUser}) => {
-  console.log(user)
   return (
     <Switch>
       {/* Routes placed here are available to all visitors */}
