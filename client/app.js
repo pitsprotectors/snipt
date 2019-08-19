@@ -21,7 +21,9 @@ const App = () => {
   const [user, setUser] = useState('')
 
   useEffect(() => {
+    console.log('here i am', data.me)
     if (data.me) setUser(data.me)
+    data.me = null
   })
 
   if (loading) return <p>Loading...</p>
