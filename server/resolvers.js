@@ -23,7 +23,7 @@ module.exports = {
     snippets: (parent, args, {db}, info) => db.models.snippet.findAll(),
     question: (parent, {id}, {db}, info) => db.models.question.findByPk(id),
     snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
-    me: async (parent, args, context, info) => {
+    me: async (parent, {args}, context, info) => {
       //console.log('THIS IS THE ME RESOLVER: ', req.headers)
       //console.log("req.headers:", req.headers)
       // const user = await axios.get("http://localhost:4000/auth/me",{
