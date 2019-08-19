@@ -24,12 +24,6 @@ module.exports = {
     question: (parent, {id}, {db}, info) => db.models.question.findByPk(id),
     snippet: (parent, {id}, {db}, info) => db.models.snippet.findByPk(id),
     me: async (parent, args, context, info) => {
-      //console.log('THIS IS THE ME RESOLVER: ', req.headers)
-      //console.log("req.headers:", req.headers)
-      // const user = await axios.get("http://localhost:4000/auth/me",{
-      //   headers:req.headers
-      // })
-      // console.log("\n\n\n\n\n\n\n\n\n me resolver:",user.data)
       return context.req.user
     }
   },
@@ -43,12 +37,11 @@ module.exports = {
       return {user}
     },
     logout: async (parent, args, context, info) => {
-      // const result = await axios.post('http://localhost:4000/auth/logout', {
-      //   headers: context.req.headers
-      // })
-      // return result.status
-      context.logout()
-      context.req.session.destroy()
+      if (context.req.user) {
+        context.logout()
+        context.req.session.destroy()
+        // context.res.redirect("http://localhost:4000/")
+      }
       return 200
     },
     deleteSnippet: (parent, {id}, {db}, info) => {
@@ -99,7 +92,9 @@ module.exports = {
       context,
       info
     ) => {
-      const existingUser = await context.db.models.user.findOne({email: email})
+      const existingUser = await context.db.models.user.findOne({
+        where: {email: email}
+      })
       if (existingUser) {
         throw new Error('User with email already exists')
       }

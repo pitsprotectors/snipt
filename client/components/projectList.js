@@ -4,12 +4,10 @@ import gql from 'graphql-tag'
 import {Link} from 'react-router-dom'
 
 const GET_PROJECTS = gql`
-  query projectList {
-    user(id: 1) {
-      projects {
-        id
-        name
-      }
+  query me {
+    projects {
+      id
+      name
     }
   }
 `
@@ -71,12 +69,15 @@ function DeleteProjectDetails({id, refetch}) {
 export default function Projects() {
   const {data, loading, error, refetch} = useQuery(GET_PROJECTS)
   if (loading) return <p>Loading...</p>
-  if (error) return <p>ERROR :(</p>
-
+  if (error) {
+    console.log(error)
+    return <p>ERROR :(</p>
+  }
+  console.log('data', data)
   return (
     <Fragment>
-      {data.user.projects &&
-        data.user.projects.map(project => (
+      {data &&
+        data.projects.map(project => (
           <div key={project.id}>
             <Link to={`/projects/${project.id}`}>
               <div>

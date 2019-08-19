@@ -25,7 +25,7 @@ const App = () => {
   })
 
   if (loading) return <p>Loading...</p>
-  if (error) return <p>ERROR: {error.message}</p>
+  if (error) return <p>app.js error: {error.message}</p>
 
   return (
     <div>
