@@ -28,17 +28,13 @@ const store = {
 }
 
 const algo = question => {
-  var d = new Date()
-  var n = d.getTime()
+  let d = new Date()
+  let n = d.getTime()
   const create = question.createdAt.getTime()
   const diff = Math.floor((n - create) / 60000)
-  //console.log(diff)
-  //console.log(question.show)
   if (diff in store) {
     question.show = !question.show
-    //console.log(question.show)
     question.save()
-    //console.log(question.show)
   }
 }
 
@@ -47,4 +43,11 @@ Question.afterCreate(question => {
     algo(question)
   })
   job.start()
+  let d = new Date()
+  let n = d.getTime()
+  const create = question.createdAt.getTime()
+  const diff = Math.floor((n - create) / 60000)
+  if (diff > 22) {
+    job.stop()
+  }
 })
