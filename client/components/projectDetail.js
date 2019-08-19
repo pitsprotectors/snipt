@@ -90,33 +90,29 @@ export default function ProjectDetail({match}) {
   if (error) return <p>ERROR: {error.message}</p>
   return (
     <Fragment>
-      <Table celled selectable>
+      <Table columns={3} inverted celled selectable color="teal">
         <Table.Header>
-          <Table.Row>
+          <Table.Row textAlign="center">
             <Table.HeaderCell colSpan="2">{data.project.name}</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           <Table.Row>
-            <Table.Cell>
+            <Table.Cell width={20} textAlign="center">
               <UpdateProjectDetails id={data.project.id} />
             </Table.Cell>
           </Table.Row>
           {data.project.questions.map((question, index) => (
             <div key={question.id}>
-              <Table.Row>
-                <Table.Cell>
-                  <Link to={`/questions/${question.id}`}>{index + 1}</Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link to={`/questions/${question.id}`}>
-                    {question.content}
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <DeleteQuestionDetails id={question.id} refetch={refetch} />
-                </Table.Cell>
-              </Table.Row>
+              <Link to={`/questions/${question.id}`} style={{color: '#FFF'}}>
+                <Table.Row>
+                  <Table.Cell width={1}>{index + 1}</Table.Cell>
+                  <Table.Cell width={15}>{question.content}</Table.Cell>
+                  <Table.Cell width={4}>
+                    <DeleteQuestionDetails id={question.id} refetch={refetch} />
+                  </Table.Cell>
+                </Table.Row>
+              </Link>
             </div>
           ))}
         </Table.Body>

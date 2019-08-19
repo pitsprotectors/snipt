@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  background-color: grey;
 }
 
 a {
@@ -9,9 +10,14 @@ a {
 label {
   display: block;
 }
+nav {
+  display: flex;
+  justify-content: space-around;
+}
 
 nav a {
   display: inline-block;
+
   margin: 1em;
 }
 

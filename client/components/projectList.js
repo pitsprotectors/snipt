@@ -49,12 +49,14 @@ export default function Projects() {
 
   return (
     <Fragment>
-      <Table celled selectable>
+      <Table columns={3} inverted celled selectable color="teal">
         <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell colSpan="2">
-              <Link to="/projects">
-                <Header as="h3">Projects!</Header>
+          <Table.Row textAlign="center">
+            <Table.HeaderCell colSpan="3">
+              <Link to="/projects" style={{color: '#FFF'}}>
+                <Header as="h3" style={{color: '#FFF'}}>
+                  Projects!
+                </Header>
               </Link>
             </Table.HeaderCell>
           </Table.Row>
@@ -63,20 +65,15 @@ export default function Projects() {
           {data.user.projects &&
             data.user.projects.map((project, index) => (
               <div key={project.id}>
-                <Table.Row>
-                  <Table.Cell>
-                    <Link to={`/projects/${project.id}`}>
-                      <div>
-                        {index + 1}
-                        {')'}
-                        {' ' + project.name}
-                      </div>
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <DeleteProjectDetails id={project.id} refetch={refetch} />
-                  </Table.Cell>
-                </Table.Row>
+                <Link to={`/projects/${project.id}`} style={{color: '#FFF'}}>
+                  <Table.Row>
+                    <Table.Cell width={1}>{index + 1}</Table.Cell>
+                    <Table.Cell width={15}>{project.name}</Table.Cell>
+                    <Table.Cell width={4}>
+                      <DeleteProjectDetails id={project.id} refetch={refetch} />
+                    </Table.Cell>
+                  </Table.Row>
+                </Link>
               </div>
             ))}
         </Table.Body>

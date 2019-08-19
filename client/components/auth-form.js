@@ -11,8 +11,8 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
-      <Form onSubmit={handleSubmit} name={name}>
+    <div style={{'background-color': 'teal'}}>
+      <Form style={{color: '#FFF'}} onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="email">
             <small>Email</small>
@@ -30,7 +30,9 @@ const AuthForm = props => {
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </Form>
-      <a href="/auth/google">{displayName} with Google</a>
+      <a href="/auth/google" style={{color: '#FFF'}}>
+        {displayName} with Google
+      </a>
     </div>
   )
 }

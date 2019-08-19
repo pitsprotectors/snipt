@@ -88,28 +88,26 @@ export default function QuestionDetail({match}) {
   if (error) return <p>ERROR: {error.message}</p>
   return (
     <Fragment>
-      <Table celled selectable>
+      <Table columns={3} inverted celled selectable color="teal">
         <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell colSpan="2">
-              <Header as="h3">{data.question.content}</Header>
+          <Table.Row textAlign="center">
+            <Table.HeaderCell colSpan="3">
+              <Header as="h3" style={{color: '#FFF'}}>
+                {data.question.content}
+              </Header>
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>
-          <Table.Row>
+        <Table.Body width={20}>
+          <Table.Row textAlign="center">
             <UpdateQuestionDetails id={data.question.id} />
           </Table.Row>
           {data.question.snippets.map((snippet, index) => (
             <div key={snippet.id}>
               <Table.Row>
-                <Table.Cell>
-                  {/* put the link here */}
-                  {index + 1}
-                  {')'}
-                  {' ' + snippet.content}
-                </Table.Cell>
-                <Table.Cell>
+                <Table.Cell width={1}>{index + 1}</Table.Cell>
+                <Table.Cell width={15}>{snippet.content}</Table.Cell>
+                <Table.Cell width={4}>
                   <DeleteSnippetDetails id={snippet.id} refetch={refetch} />
                 </Table.Cell>
               </Table.Row>

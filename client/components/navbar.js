@@ -12,8 +12,12 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <Link to="/projects">Projects</Link>
+          <Link to="/home" style={{color: '#FFF'}}>
+            Home
+          </Link>
+          <Link to="/projects" style={{color: '#FFF'}}>
+            Projects
+          </Link>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
@@ -21,9 +25,15 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/projects">Projects</Link>
-          <Link to="/signup">Sign Up</Link>
+          <Link to="/login" style={{color: '#FFF'}}>
+            Login
+          </Link>
+          <Link to="/projects" style={{color: '#FFF'}}>
+            Projects
+          </Link>
+          <Link to="/signup" style={{color: '#FFF'}}>
+            Sign Up
+          </Link>
         </div>
       )}
     </nav>
