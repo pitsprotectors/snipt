@@ -67,7 +67,8 @@ export default function Projects() {
                   <Table.Cell>
                     <Link to={`/projects/${project.id}`}>
                       <div>
-                        {project.name} {project.id}
+                        {project.key}
+                        {project.name}
                       </div>
                     </Link>
                   </Table.Cell>
