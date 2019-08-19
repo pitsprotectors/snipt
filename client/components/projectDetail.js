@@ -102,11 +102,11 @@ export default function ProjectDetail({match}) {
               <UpdateProjectDetails id={data.project.id} />
             </Table.Cell>
           </Table.Row>
-          {data.project.questions.map(question => (
+          {data.project.questions.map((question, index) => (
             <div key={question.id}>
               <Table.Row>
                 <Table.Cell>
-                  <Link to={`/questions/${question.id}`}>{question.id}</Link>
+                  <Link to={`/questions/${question.id}`}>{index + 1}</Link>
                 </Table.Cell>
                 <Table.Cell>
                   <Link to={`/questions/${question.id}`}>

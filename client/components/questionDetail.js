@@ -100,12 +100,14 @@ export default function QuestionDetail({match}) {
           <Table.Row>
             <UpdateQuestionDetails id={data.question.id} />
           </Table.Row>
-          {data.question.snippets.map(snippet => (
+          {data.question.snippets.map((snippet, index) => (
             <div key={snippet.id}>
               <Table.Row>
                 <Table.Cell>
                   {/* put the link here */}
-                  {snippet.content} {snippet.id}
+                  {index + 1}
+                  {')'}
+                  {' ' + snippet.content}
                 </Table.Cell>
                 <Table.Cell>
                   <DeleteSnippetDetails id={snippet.id} refetch={refetch} />

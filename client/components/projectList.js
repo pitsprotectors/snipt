@@ -61,14 +61,15 @@ export default function Projects() {
         </Table.Header>
         <Table.Body>
           {data.user.projects &&
-            data.user.projects.map(project => (
+            data.user.projects.map((project, index) => (
               <div key={project.id}>
                 <Table.Row>
                   <Table.Cell>
                     <Link to={`/projects/${project.id}`}>
                       <div>
-                        {project.key}
-                        {project.name}
+                        {index + 1}
+                        {')'}
+                        {' ' + project.name}
                       </div>
                     </Link>
                   </Table.Cell>
