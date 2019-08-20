@@ -1,5 +1,4 @@
 import React from 'react'
-//import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 
 import {
@@ -10,60 +9,47 @@ import {
   QuestionDetail
 } from './components'
 
+import Welcome from './Welcome'
+
 const Routes = ({user, setUser}) => {
   return (
     <Switch>
-      {/* Routes placed here are available to all visitors */}
+      {/* NOT LOGGED IN ROUTES */}
       <Route path="/login" render={() => <Login setUser={setUser} />} />
+      <Route
+        exact
+        path="/projects"
+        render={() => <ProjectList user={user} />}
+      />
+      <Route
+        exact
+        path="/projects"
+        render={() => <ProjectList user={user} />}
+      />
+      <Route exact path="/projects/:projectId" component={ProjectDetail} />
+      <Route exact path="/questions/:questionId" component={QuestionDetail} />
       <Route path="/signup" render={() => <Signup setUser={setUser} />} />
-      {user.id && (
+      <Route exact path="/" component={Welcome} />
+      {user && (
         <Switch>
-          {/* Routes placed here are only available after logging in */}
+          {/* LOGGED IN ROUTES */}
           <Route
             exact
             path="/projects"
             render={() => <ProjectList user={user} />}
           />
-          <Route path="/projects/:projectId" component={ProjectDetail} />
-          <Route path="/questions/:questionId" component={QuestionDetail} />
+          <Route exact path="/projects/:projectId" component={ProjectDetail} />
+          <Route
+            exact
+            path="/questions/:questionId"
+            component={QuestionDetail}
+          />
         </Switch>
       )}
-      {/* Displays our Login component as a fallback */}
+      {/* FALLBACK */}
       <Route render={() => <Login setUser={setUser} />} />
     </Switch>
   )
 }
-
-/**
- * COMPONENT
- */
-// class Routes extends Component {
-//   render() {
-//     return (
-//       <Switch>
-//         {/* Routes placed here are available to all visitors */}
-//         <Route path="/login" render={() => <Login auth={this.props.auth} />} />
-//         <Route
-//           path="/signup"
-//           render={() => <Signup auth={this.props.auth} />}
-//         />
-//         {this.props.user && (
-//           <Switch>
-//             {/* Routes placed here are only available after logging in */}
-//             <Route
-//               exact
-//               path="/projects"
-//               render={() => <ProjectList user={this.props.user} />}
-//             />
-//             <Route path="/projects/:projectId" component={ProjectDetail} />
-//             <Route path="/questions/:questionId" component={QuestionDetail} />
-//           </Switch>
-//         )}
-//         {/* Displays our Login component as a fallback */}
-//         <Route render={() => <Login auth={this.props.auth} />} />
-//       </Switch>
-//     )
-//   }
-// }
 
 export default withRouter(Routes)

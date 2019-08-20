@@ -28,7 +28,11 @@ const server = new ApolloServer({
 
 passport.use(
   new GraphQLLocalStrategy(async (email, password, done) => {
+    console.log(email, password)
+    const users = await db.models.user.findAll()
     const user = await db.models.user.findOne({where: {email: email}})
+    console.log(users)
+    console.log(user)
     if (user.correctPassword(password)) {
       const matchingUser = user
       done(null, matchingUser)
