@@ -31,6 +31,14 @@ module.exports = {
       db.models.question.findAll({where: {projectId: id, show: true}})
   },
   Mutation: {
+    questionStart: async (parent, {id}, {db}, info) => {
+      const question = await db.models.question.findByPk(id)
+      const now = new Date()
+      return question.update({
+        startTime: now,
+        show: true
+      })
+    },
     login: async (parent, {email, password}, context, info) => {
       const {user} = await context.authenticate('graphql-local', {
         email,

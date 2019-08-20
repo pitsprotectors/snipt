@@ -10,6 +10,9 @@ const Question = db.define('question', {
   show: {
     type: Sequelize.BOOLEAN,
     defaultValue: true
+  },
+  startTime: {
+    type: Sequelize.DATE
   }
 })
 
@@ -27,27 +30,32 @@ const store = {
   21: true
 }
 
-const algo = question => {
+const algo = (question, bin) => {
   let d = new Date()
   let n = d.getTime()
-  const create = question.createdAt.getTime()
-  const diff = Math.floor((n - create) / 60000)
-  if (diff in store) {
-    question.show = !question.show
-    question.save()
+  const change = Math.floor((n - question.startTime.getTime()) / 6000)
+  if (change in store) {
+    if (!(change in bin)) {
+      bin[change] = true
+      question.show = !question.show
+      question.save()
+    }
   }
 }
 
 Question.afterCreate(question => {
+  question.startTime = question.createdAt
+  question.save()
+  let bin = {}
   const job = new CronJob('* * * * * *', () => {
-    algo(question)
+    algo(question, bin)
   })
   job.start()
   let d = new Date()
   let n = d.getTime()
-  const create = question.createdAt.getTime()
-  const diff = Math.floor((n - create) / 60000)
-  if (diff > 22) {
+  const diff = Math.floor((n - question.startTime.getTime()) / 6000)
+  if (diff > 25) {
     job.stop()
+    return 1
   }
 })
