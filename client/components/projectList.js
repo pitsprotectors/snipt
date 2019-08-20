@@ -4,10 +4,12 @@ import gql from 'graphql-tag'
 import {Link} from 'react-router-dom'
 
 const GET_PROJECTS = gql`
-  query me {
-    projects {
-      id
-      name
+  query lala($userid: ID!) {
+    user(id: $userid) {
+      projects {
+        id
+        name
+      }
     }
   }
 `
@@ -46,7 +48,9 @@ const DELETE_PROJECT = gql`
 //   }
 
 function DeleteProjectDetails({id, refetch}) {
-  const [deleteProject, {data, loading, error}] = useMutation(DELETE_PROJECT)
+  const [deleteProject, {data, loading, error}] = useMutation(DELETE_PROJECT, {
+    variables: {id: id}
+  })
   if (loading) return <p>Loading...</p>
   if (error) return <p>ERROR: {error.message}</p>
   return (
@@ -66,16 +70,20 @@ function DeleteProjectDetails({id, refetch}) {
   )
 }
 
-export default function Projects() {
-  const {data, loading, error, refetch} = useQuery(GET_PROJECTS)
+export default function Projects({user}) {
+  const {data, loading, error, refetch} = useQuery(GET_PROJECTS, {
+    variables: {userid: user.id}
+  })
+  console.log('PROJECTS:', data)
   if (loading) return <p>Loading...</p>
   if (error) {
-    return <p>ERROR :(</p>
+    return <p>ERROR :( {error.message}</p>
   }
+
   return (
     <Fragment>
-      {data &&
-        data.projects.map(project => (
+      {data.user &&
+        data.user.projects.map(project => (
           <div key={project.id}>
             <Link to={`/projects/${project.id}`}>
               <div>
