@@ -46,6 +46,7 @@ module.exports = `
     me: User
   }
   type Mutation {
+    questionStart(id:ID!):Question!
     login(email: String!, password: String!): AuthPayload
     logout: Int
     deleteSnippet(id: ID!): Int!
