@@ -27,12 +27,6 @@ const App = () => {
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>app.js error: {error.message}</p>
-  if (data.me) {
-    console.log('data???', user)
-  }
-  if (user) {
-    console.log('user', user)
-  }
   return (
     <div>
       <Navbar user={user} setUser={setUser} />
